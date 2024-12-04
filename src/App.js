@@ -1,25 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import Login from './Pages/Login';
+import Register from './Components/Register';
+import Dashboard from './Pages/Dashboard';
+import ProtectedRoute from './Components/ProtectedRoute';
+import { getTokens } from './utils/auth';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const { accessToken } = getTokens();
+
+    return (
+        <Router>
+            <Routes>
+                <Route path="/login" element={
+                    accessToken ? <Navigate to="/dashboard" replace /> : <Login />
+                } />
+                <Route path="/register" element={
+                    accessToken ? <Navigate to="/dashboard" replace /> : <Register />
+                } />
+
+
+                <Route path="/dashboard" element={
+                    <ProtectedRoute>
+                        <Dashboard />
+                    </ProtectedRoute>
+                } />
+
+
+                <Route path="/" element={
+                    accessToken ? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />
+                } />
+            </Routes>
+        </Router>
+    );
 }
 
 export default App;

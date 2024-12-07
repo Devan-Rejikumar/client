@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { loginUser } from '../utils/api';
 import { storeTokens } from '../utils/auth';
+import '../styles/theme.css';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -50,52 +51,47 @@ const Login = () => {
     };
 
     return (
-        <div className="container mt-5">
-            <div className="row justify-content-center">
-                <div className="col-md-6">
-                    <div className="card">
-                        <div className="card-body">
-                            <h2 className="text-center mb-4">Login</h2>
-                            {error && (
-                                <div className="alert alert-danger" role="alert">
-                                    {error}
-                                </div>
-                            )}
-                            <form onSubmit={handleSubmit}>
-                                <div className="mb-3">
-                                    <label htmlFor="email" className="form-label">Email</label>
-                                    <input
-                                        type="email"
-                                        className="form-control"
-                                        id="email"
-                                        name="email"
-                                        value={formData.email}
-                                        onChange={handleChange}
-                                        required
-                                    />
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="password" className="form-label">Password</label>
-                                    <input
-                                        type="password"
-                                        className="form-control"
-                                        id="password"
-                                        name="password"
-                                        value={formData.password}
-                                        onChange={handleChange}
-                                        required
-                                    />
-                                </div>
-                                <button 
-                                    type="submit" 
-                                    className="btn btn-primary w-100"
-                                    disabled={isLoading}
-                                >
-                                    {isLoading ? 'Logging in...' : 'Login'}
-                                </button>
-                            </form>
-                        </div>
+        <div className="auth-container">
+            <div className="auth-card">
+                <h1 className="auth-title">Login</h1>
+                <form onSubmit={handleSubmit}>
+                    <div className="form-group">
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            className="form-input"
+                            placeholder="hello@example.co"
+                            value={formData.email}
+                            onChange={handleChange}
+                            required
+                        />
                     </div>
+                    <div className="form-group">
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            className="form-input"
+                            placeholder="••••••••"
+                            value={formData.password}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+                    {error && <div className="error-message">{error}</div>}
+                    <button 
+                        type="submit" 
+                        className="submit-button"
+                        disabled={isLoading}
+                    >
+                        {isLoading ? 'Logging in...' : 'Log in'}
+                    </button>
+                </form>
+                <div className="auth-footer">
+                    <Link to="/forgot-password" className="auth-link">
+                        Forgot your password?
+                    </Link>
                 </div>
             </div>
         </div>

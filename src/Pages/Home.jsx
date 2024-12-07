@@ -6,10 +6,13 @@ import { getAllUsers } from '../redux/reducers/userSlice'
 const Home = () => {
   const dispatch = useDispatch()
   useEffect(() => {
+    const adminToken = localStorage.getItem('adminToken');
+    console.log('Admin Token:', adminToken);
     dispatch(getAllUsers())
   }, [dispatch])
 
   const {users} = useSelector((state) => state.users)
+  console.log('Users from Redux:', users);
   return (
     <div className='container'>
       <h1 className='text-center bg-primary text-white p-2'>User Management System</h1>

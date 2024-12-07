@@ -4,16 +4,19 @@ import { getTokens } from '../../utils/auth'
 // Get All Users
 export const getAllUsers = createAsyncThunk('user/getAllUsers', async (_, { rejectWithValue }) => {
     try {
+        const adminToken = localStorage.getItem('adminToken');
         const { accessToken } = getTokens();
-        if (!accessToken) {
-            throw new Error('No access token found');
+        const token = adminToken || accessToken;
+
+        if (!token) {
+            throw new Error('No token found');
         }
 
-        const response = await fetch('http://localhost:9000/api/v1/users', {
+        const response = await fetch('http://localhost:9000/api/v1/admin/users', {
             credentials: 'include',
             headers: {
                 'Accept': 'application/json',
-                'Authorization': `Bearer ${accessToken}`
+                'Authorization': `Bearer ${token}`
             }
         });
         

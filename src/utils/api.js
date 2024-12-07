@@ -50,31 +50,32 @@ const loginUser = async (email, password) => {
         const response = await fetch(`${BASE_URL}login`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
             },
-            credentials: 'include',
-            body: JSON.stringify({ email, password })
+            body: JSON.stringify({ email, password }),
+            credentials: 'include'
         });
 
         if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || 'Invalid credentials');
+            const errorData = await response.json().catch(() => ({
+                message: 'An error occurred during login'
+            }));
+            throw new Error(errorData.message);
         }
 
         const data = await response.json();
-        
         // Store tokens immediately
         if (data.accessToken && data.refreshToken) {
             storeTokens(data.accessToken, data.refreshToken);
         } else {
             throw new Error('Token data missing from response');
         }
-
         return data;
     } catch (error) {
         console.error('Error logging in user:', error);
         throw error;
     }
-}
+};
 
 export { authenticatedFetch, loginUser };
